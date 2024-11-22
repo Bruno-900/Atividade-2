@@ -233,13 +233,17 @@ while True:
                 confirmacao = input("Deseja realmente excluir este registro? (S/N): ").strip().lower() 
                 
                 if confirmacao == 's':
+                    
                     del lista[indice]
                     del dicionario[registro]
                     salvar_no_txt(dicionario)
-                    print("Registro da bagagem excluído")
+                    print("Registro da bagagem excluído") 
+                    input("Aperte ENTER para voltar") 
+                    os.system('cls')
                     break
 
                 else :
+
                     os.system('cls')
                     print("Exclusão cancelada!")
                     break
@@ -269,7 +273,7 @@ Qual campo deseja alterar?
 5. Horário
 6. Peso
 7. Sair
-''')
+==>''')
 
             #correçao erro de digitação errada do usuario.
 
@@ -299,7 +303,8 @@ Qual campo deseja alterar?
                     else:
                         os.system('cls')
                         print("Inválido! Digite novamente.")
-            
+                        
+                        input("Aperte ENTER para tentar novamente.")
             elif campo == '3':
                 
                 os.system('cls')
@@ -316,13 +321,16 @@ Qual campo deseja alterar?
                     nova_data = input("Digite a nova data (DD/MM/AAAA): ")
                     
                     try:
+                        
                         data_convertida = datetime.datetime.strptime(nova_data, "%d/%m/%Y").date()
                         dicionario[registro][3] = data_convertida.strftime("%d/%m/%Y")
                         break
                     
                     except ValueError:
+                        
                         os.system('cls')
                         print("Inválido! Digite novamente.")
+                        input("Aperte ENTER para tentar novamente.")
             
             elif campo == '5':
                 
@@ -338,16 +346,37 @@ Qual campo deseja alterar?
                         break
                     
                     except ValueError:
-                        os.system('cls')
+                        
                         print("Inválido! Digite novamente.")
-            
+                        input("Aperte ENTER para tentar novamente.")
+
             elif campo == '6':
                 
-                os.system('cls')
-                mostrar_registro_tabela(registro, dicionario)
-                novo_peso = float(input("Digite o novo peso: "))
-                dicionario[registro][5] = novo_peso
-            
+                while True:
+                    
+                    os.system('cls')
+                    mostrar_registro_tabela(registro, dicionario)
+                    
+                    try:
+                        
+                        novo_peso = float(input("Digite o novo peso: "))
+                        
+                        # Verifica se o peso é positivo
+                        
+                        if novo_peso > 0:
+                            
+                            dicionario[registro][5] = novo_peso
+                            break
+                        
+                        else:
+                            print("O peso deve ser um número positivo. Tente novamente.")
+                    
+                    except ValueError:
+                        
+                        print("Inválido! Digite um número válido para o peso.")
+                        input("Aperte ENTER para tentar novamente.")
+
+  
             elif campo == '7':
                 os.system('cls')
                 break
@@ -377,17 +406,25 @@ Qual campo deseja alterar?
 
     if entrada == '5':
         
-        os.system('cls')
-        
-        tabela = [["Registro", "Nome", "CPF", "Destino", "Data", "Horário", "Peso(Kg)"]]
-        for principal, secundarios in dicionario.items():
-            tabela.append([principal, *secundarios])
+        if not dicionario :
+            
+            os.system('cls')
 
-        #usando a biblioteca tabulate para formatar.
-    
-        print(tabulate(tabela, headers="firstrow", tablefmt="grid", colalign=("left", "left", "left", "left", "left", "left", "left")))
-        input("Aperte ENTER para sair")
-        os.system('cls')
+            print("Nenhum registro encontrado !")
+        
+        else:
+
+            os.system('cls')
+            
+            tabela = [["Registro", "Nome", "CPF", "Destino", "Data", "Horário", "Peso(Kg)"]]
+            for principal, secundarios in dicionario.items():
+                tabela.append([principal, *secundarios])
+
+            #usando a biblioteca tabulate para formatar.
+
+            print(tabulate(tabela, headers="firstrow", tablefmt="grid", colalign=("left", "left", "left", "left", "left", "left", "left")))
+            input("Aperte ENTER para sair")
+            os.system('cls')
 
 #sair do programa
 
